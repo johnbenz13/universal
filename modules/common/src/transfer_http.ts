@@ -30,9 +30,11 @@ export class TransferHttpCacheInterceptor implements HttpInterceptor {
 
   private isCacheActive = true;
 
-  private invalidateCacheEntry(url: string) {
-    this.transferState.remove(makeStateKey<TransferHttpResponse>('G.' + url));
-    this.transferState.remove(makeStateKey<TransferHttpResponse>('H.' + url));
+  private makeCacheKey(req: HttpRequest<any>): string {
+    const urlWithParams = req.urlWithParams;
+    const headersString = JSON.stringify(req.headers);
+
+    return makeStateKey<TransferHttpResponse>(urlWithParams + headersString);
   }
 
   constructor(appRef: ApplicationRef, private transferState: TransferState) {
@@ -44,19 +46,12 @@ export class TransferHttpCacheInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Stop using the cache if there is a mutating call.
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-      this.isCacheActive = false;
-      this.invalidateCacheEntry(req.url);
-    }
-
     if (!this.isCacheActive) {
       // Cache is no longer active. Pass the request through.
       return next.handle(req);
     }
 
-    const key = (req.method === 'GET' ? 'G.' : 'H.') + req.url;
-    const storeKey = makeStateKey<TransferHttpResponse>(key);
+    const storeKey = this.makeCacheKey(req);
 
     if (this.transferState.hasKey(storeKey)) {
       // Request found in cache. Respond using it.
