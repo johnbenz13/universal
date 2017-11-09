@@ -7,7 +7,7 @@ import {first} from 'rxjs/operator/first';
 import {toPromise} from 'rxjs/operator/toPromise';
 import {_do} from 'rxjs/operator/do';
 
-import {BrowserTransferStateModule, TransferState, makeStateKey} from '@angular/platform-browser';
+import {BrowserTransferStateModule, TransferState, makeStateKey, StateKey} from '@angular/platform-browser';
 
 export interface TransferHttpResponse {
   body?: any | null;
@@ -30,7 +30,7 @@ export class TransferHttpCacheInterceptor implements HttpInterceptor {
 
   private isCacheActive = true;
 
-  private makeCacheKey(req: HttpRequest<any>): string {
+  private makeCacheKey(req: HttpRequest<any>): StateKey<TransferHttpResponse> {
     const urlWithParams = req.urlWithParams;
     const headersString = JSON.stringify(req.headers);
 
