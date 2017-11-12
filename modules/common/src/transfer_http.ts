@@ -6,6 +6,7 @@ import {filter} from 'rxjs/operator/filter';
 import {first} from 'rxjs/operator/first';
 import {toPromise} from 'rxjs/operator/toPromise';
 import {_do} from 'rxjs/operator/do';
+import * as URL from 'url-parse';
 
 import {BrowserTransferStateModule, TransferState, makeStateKey, StateKey} from '@angular/platform-browser';
 
@@ -33,7 +34,12 @@ export class TransferHttpCacheInterceptor implements HttpInterceptor {
   private makeCacheKey(req: HttpRequest<any>): StateKey<TransferHttpResponse> {
     const urlObject = new URL(req.urlWithParams);
 
-    const urlString = urlObject.pathname + urlObject.search;
+    console.log('URL OBJECT', urlObject);
+
+    const urlString = urlObject.pathname + urlObject.query;
+
+    console.log('URL QUERY', urlObject.query, urlString);
+
     const headersString = JSON.stringify(req.headers);
 
     return makeStateKey<TransferHttpResponse>(urlString + headersString);
