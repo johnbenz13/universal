@@ -31,10 +31,12 @@ export class TransferHttpCacheInterceptor implements HttpInterceptor {
   private isCacheActive = true;
 
   private makeCacheKey(req: HttpRequest<any>): StateKey<TransferHttpResponse> {
-    const urlWithParams = req.urlWithParams;
+    const urlObject = new URL(req.urlWithParams);
+
+    const urlString = urlObject.pathname + urlObject.search;
     const headersString = JSON.stringify(req.headers);
 
-    return makeStateKey<TransferHttpResponse>(urlWithParams + headersString);
+    return makeStateKey<TransferHttpResponse>(urlString + headersString);
   }
 
   constructor(appRef: ApplicationRef, private transferState: TransferState) {
