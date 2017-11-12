@@ -143,6 +143,16 @@
   dependencies:
     "@types/node" "*"
 
+"@types/url-parse@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/url-parse/-/url-parse-1.1.0.tgz#61f8e1b52024d07fceb73fd7f8292e5ddd2b60a1"
+  dependencies:
+    "@types/url-search-params" "*"
+
+"@types/url-search-params@*":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@types/url-search-params/-/url-search-params-0.10.0.tgz#35bc203a928f309cfbe52d2ca68bac3985f2c493"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
